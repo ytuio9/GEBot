@@ -1,5 +1,3 @@
-
-
 public class ChannelUser {
 
 	private String prefix;

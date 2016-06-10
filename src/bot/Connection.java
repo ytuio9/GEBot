@@ -7,9 +7,26 @@ import java.util.concurrent.BlockingQueue;
 
 import events.*;
 
+/**
+ * The Connection class represents a connection between the client
+ * and the server. A Connection object contains the necessary fields
+ * to communicate with the server: a Socket, BufferedReader and 
+ * BufferedWriter. The Connection object has two main functionalities:
+ * dealing with low-level communication between the client and the
+ * server, and encapsulating messages in the correct IRCEvent subclass
+ * and placing them in the event queue so that the Bot object that owns
+ * the Connection can handle the events accordingly.
+ * 
+ * The Connection constructor takes in two parameters: hostName and port,
+ * which are used to open a socket to the server. A Connection object
+ * also has methods to check if the connection is live and if it has
+ * been 'initialised'. A connection is initialised after the private
+ * fields have all been initialised.
+ * 
+ * TODO: complete this
+ */
 public class Connection implements Runnable {
 
-	
 	private Socket socket;
 	private BufferedReader in;
 	private BufferedWriter out;
@@ -59,6 +76,8 @@ public class Connection implements Runnable {
 					e.printStackTrace();
 				}
 			}
+			
+			close();
 		} catch (UnknownHostException e) {
 			System.out.println("Error: unknown host.");
 			running = false;
@@ -97,13 +116,13 @@ public class Connection implements Runnable {
 		} catch (IOException e) {
 		}
 	}
-
-	public synchronized boolean isRunning() {
-		return running;
-	}
 	
 	public synchronized BlockingQueue<IRCEvent> getQueue() {
 		return eventQueue;
+	}
+	
+	public synchronized boolean isRunning() {
+		return running;
 	}
 	
 	public boolean isInitialised() {
